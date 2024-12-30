@@ -1,0 +1,88 @@
+ #student table
+ create table students(
+    studentID INT PRIMARY KEY,
+    FirstName varchar(50) not null,
+    LastName varchar(50) not null,
+    DateOfBirth Date not null,
+    Email varchar(100) unique not null,
+    phonenumber varchar(15)
+ );
+
+select *from students order by studentID asc;
+
+insert into students(studentID,FirstName,LastName,DateOfBirth,Email,phonenumber) values(1,'tejal','sutar','12-mar-2000','tejusutar12@gmail.com','9966432671');
+insert into students(studentID,FirstName,LastName,DateOfBirth,Email,phonenumber) values(2,'rama','pandey','09-may-1999','ramapandey09@gmail.com','8812418055');
+insert into students(studentID,FirstName,LastName,DateOfBirth,Email,phonenumber) values(3,'tushar','mishra','15-jun-2001','tusharmishra15@gmail.com','7760994521');
+insert into students(studentID,FirstName,LastName,DateOfBirth,Email,phonenumber) values(4,'hemant','deshmukh','20-aug-2002','hemantd20@gamail.com','9076247711');
+insert into students(studentID,FirstName,LastName,DateOfBirth,Email,phonenumber) values(5,'tina','sharma','15-apr-2003','sharmatina1@gmail.com','8657889045');
+
+
+
+#courses table
+ create table courses(
+ courseID int primary key,
+ courseName varchar(100) not null,
+ credits int not null);
+
+SELECT*FROM COURSES  order by courseID asc;
+
+insert into courses(courseID,courseName,credits) values(1,'SQL',7);
+insert into courses(courseID,courseName,creditS) values(2,'java',8);
+insert into courses(courseID,courseName,credits) values(3,'python','6');
+insert into courses(courseID,courseName,credits) values(4,'full stack development',8);
+insert into courses(courseID,courseName,credits) values(5,'software testing',5);
+
+
+#enrollments table
+ create table enrollments(
+ enrollment_id int primary key,
+ StudentID int not null,
+ CourseID int not null,
+ Grade char(2),
+ EnrollmentDate Date
+);
+
+select*from enrollments order by enrollment_id asc;
+
+insert into enrollments(enrollment_id,StudentID, courseID,Grade,EnrollmentDate) values(1,1,5,'B','12-mar-2020');
+insert into enrollments(enrollment_id,StudentID, courseID,Grade,EnrollmentDate) values(2,4,3,'A','15-may-2021');
+insert into enrollments(enrollment_id,StudentID, courseID,Grade,EnrollmentDate) values(3,3,1,'A','25-may-2021');
+insert into enrollments(enrollment_id,StudentID, courseID,Grade,EnrollmentDate) values(4,2,2,'B','30-nov-2022');
+insert into enrollments(enrollment_id,StudentID, courseID,Grade,EnrollmentDate) values(5,5,4,'c','25-aug-2022');
+
+
+#update student information
+update students set email='deshmukh20@gmail.com' where studentID=4;
+
+
+#delete a course
+delete from courses where course_id=5;
+
+#add a new enrollments
+insert into enrollments(enrollment_id, studentID,courseID,grade,enrollmentDate) values(6,2,5,'B','12-jun-2023');
+
+#retrieve data
+//1.list all students with their courses and grades
+select students.first_name, students.last_name ,courses.courseName,Enrollments.grade from enrollments join students ON Enrollments.studentID=Students.StudentID Join courses ON Enrollements.courseID=courses.courseID;
+
+//2.find students enrolled in specific course
+select students.FirstName,students.last name from enrollments join students ON enrollments.studentID=Students.studentID where enrollments courseID=1;
+
+//3.calculate the average grade for a course
+select courses.courseName,
+avg(case 
+when enrollments.grade ='A' THEN 3
+when enrollments.grade ='B' THEN 2
+when enrollments.grade ='c' THEN 1 
+ELSE 0
+ END) AS average_grade
+from courses
+join enrollments ON courses.courseID=enrollments.courseID  group by courses.courseName;
+
+
+//4.find top performing students in each course
+select courses.courseName,
+students.firstName,
+students.lastName,
+enrollments.grade
+from enrollments join students ON enrollments.studentID=students.studentID JOIN courses ON enrollments.courseID=courses.courseID WHERE enrollments.grade='A';
